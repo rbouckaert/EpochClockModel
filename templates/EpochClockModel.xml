@@ -1,0 +1,55 @@
+
+<beast version='2.0'
+       namespace='beast.app.beauti:beast.core:beast.evolution.branchratemodel:beast.evolution.speciation:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.nuc:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.likelihood:beast.evolution:beast.math.distributions'>
+
+
+    <!-- Clock models -->
+    <mergewith point='clockModelTemplates'>
+
+        <!-- Strict clock -->
+        <subtemplate id='EpochClockModel' class='epochclock.evolution.branchratemodel.EpochClockModel'
+                     mainid='EpochClockModel.c:$(n)'>
+            <![CDATA[
+                <branchRateModel spec='epochclock.evolution.branchratemodel.EpochClockModel' id='EpochClockModel.c:$(n)'>
+                	<epochTimeTops id="epochTimeTops.c:$(n)" spec='parameter.RealParameter' value='10.0' estimate='false'/>
+                	<relativeRates id="epochRelativeRates.c:$(n)" spec='parameter.RealParameter' value='1.0  1.0' lower="0.0" estimate='true'/>
+                    <clock.rate id='epochClockRate.c:$(n)' spec='parameter.RealParameter' value='1.0' estimate='false'/>
+                </branchRateModel>
+
+				<operator id='epochClockRateScaler.c:$(n)' spec='ScaleOperator' scaleFactor="0.75" weight="3" parameter='@epochClockRate.c:$(n)'/>
+				<operator id='epochDeltaExchangeOperator.c:$(n)' spec='DeltaExchangeOperator' delta="0.05" weight="3" parameter='@epochRelativeRates.c:$(n)'/>
+
+				<upDownOperator id='epochClockUpDownOperator.c:$(n)' spec='UpDownOperator' scaleFactor="0.75" weight="3">
+					<up idref="epochClockRate.c:$(n)"/>
+					<down idref="Tree.t:$(n)"/>
+				</upDownOperator>
+
+		        <prior id='EpochClockPrior.c:$(n)' x='@epochClockRate.c:$(n)'><distr spec="beast.math.distributions.Uniform" upper='Infinity'/></prior>
+]]>
+            <connect srcID='epochClockRate.c:$(n)' targetID='state' inputName='stateNode'
+                     if='inlikelihood(epochClockRate.c:$(n)) and epochClockRate.c:$(n)/estimate=true'/>
+            <connect srcID='epochRelativeRates.c:$(n)' targetID='state' inputName='stateNode'
+                     if='inlikelihood(epochRelativeRates.c:$(n)) and epochRelativeRates.c:$(n)/estimate=true'/>
+            <connect srcID='ClockPrior.c:$(n)' targetID='prior' inputName='distribution'
+                     if='inlikelihood(epochClockRate.c:$(n)) and epochClockRate.c:$(n)/estimate=true'>substitution rate of
+                partition c:$(n)
+            </connect>
+            <connect srcID='epochClockRateScaler.c:$(n)' targetID='mcmc' inputName='operator'
+                     if='inlikelihood(epochClockRate.c:$(n)) and epochClockRate.c:$(n)/estimate=true'>Scale substitution rate of
+                partition c:$(n)
+            </connect>
+            <connect srcID='epochDeltaExchangeOperator.c:$(n)' targetID='mcmc' inputName='operator'
+                     if='inlikelihood(epochRelativeRates.c:$(n)) and epochRelativeRates.c:$(n)/estimate=true'>Exchange relative epoch rates of
+                partition c:$(n)
+            </connect>
+            <connect srcID='epochClockUpDownOperator.c:$(n)' targetID='mcmc' inputName='operator'
+                     if='nooperator(FixMeanRatesOperator) and inlikelihood(epochClockRate.c:$(n)) and inlikelihood(Tree.t:$(n)) and Tree.t:$(n)/estimate=true and epochClockRate.c:$(n)/estimate=true'>
+                Scale up substitution rate c:$(n) and scale down tree t:($n)
+            </connect>
+        </subtemplate>
+
+    </mergewith>
+
+</beast>
+
+
