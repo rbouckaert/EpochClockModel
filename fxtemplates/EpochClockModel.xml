@@ -11,8 +11,8 @@
                      mainid='EpochClockModel.c:$(n)'>
             <![CDATA[
                 <branchRateModel spec='epochclock.evolution.branchratemodel.EpochClockModel' id='EpochClockModel.c:$(n)'>
-                	<epochTimeTops id="epochTimeTops.c:$(n)" spec='parameter.RealParameter' value='10.0' estimate='false'/>
-                	<relativeRates id="epochRelativeRates.c:$(n)" spec='parameter.RealParameter' value='1.0  1.0' lower="0.0" estimate='true'/>
+                	<epochTimeTops id="epochTimeTops.c:$(n)" spec='parameter.RealParameter' value='10.0 20.0' estimate='false'/>
+                	<relativeRates id="epochRelativeRates.c:$(n)" spec='parameter.RealParameter' value='1.0 1.0 1.0' lower="0.0" estimate='true'/>
                     <clock.rate id='epochClockRate.c:$(n)' spec='parameter.RealParameter' value='1.0' estimate='false'/>
                 </branchRateModel>
 
@@ -46,6 +46,11 @@
                      if='nooperator(FixMeanRatesOperator) and inlikelihood(epochClockRate.c:$(n)) and inlikelihood(Tree.t:$(n)) and Tree.t:$(n)/estimate=true and epochClockRate.c:$(n)/estimate=true'>
                 Scale up substitution rate c:$(n) and scale down tree t:($n)
             </connect>
+
+            <connect srcID='epochRelativeRates.c:$(n)' targetID='tracelog' inputName='log'
+                     if='inlikelihood(epochRelativeRates.c:$(n)) and epochRelativeRates.c:$(n)/estimate=true'/>
+            <connect srcID='epochClockRate.c:$(n)' targetID='tracelog' inputName='log'
+                     if='inlikelihood(epochClockRate.c:$(n)) and epochClockRate.c:$(n)/estimate=true'/>
         </subtemplate>
 
     </mergewith>
