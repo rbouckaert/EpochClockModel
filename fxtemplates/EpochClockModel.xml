@@ -1,6 +1,6 @@
 
 <beast version='2.0'
-       namespace='beast.app.beauti:beast.core:beast.evolution.branchratemodel:beast.evolution.speciation:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.nuc:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.likelihood:beast.evolution:beast.math.distributions'>
+       namespace='beast.app.beauti:beast.pkgmgmt:beast.base.core:beast.base.inference:beast.base.evolution.branchratemodel:beast.base.evolution.speciation:beast.base.evolution.tree.coalescent:beast.base.util:beast.base.math:beast.evolution.nuc:beast.base.evolution.operator:beast.base.inference.operator:beast.base.evolution.sitemodel:beast.base.evolution.substitutionmodel:beast.base.evolution.likelihood:beast.evolution:beast.base.inference.distribution'>
 
 
     <!-- Clock models -->
@@ -24,7 +24,7 @@
 					<down idref="Tree.t:$(n)"/>
 				</upDownOperator>
 
-		        <prior id='EpochClockPrior.c:$(n)' x='@epochClockRate.c:$(n)'><distr spec="beast.math.distributions.Uniform" upper='Infinity'/></prior>
+		        <prior id='EpochClockPrior.c:$(n)' x='@epochClockRate.c:$(n)'><distr spec="beast.base.inference.distribution.Uniform" upper='Infinity'/></prior>
 ]]>
             <connect srcID='epochClockRate.c:$(n)' targetID='state' inputName='stateNode'
                      if='inlikelihood(epochClockRate.c:$(n)) and epochClockRate.c:$(n)/estimate=true'/>
