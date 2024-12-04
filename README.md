@@ -6,7 +6,18 @@ A [BEAST2](http://beast2.org) package for epoch clock models
 
 ## Installation
 
-Install by hand as follows:
+You can install through the package manager or by hand.
+
+To install through the package manager:
+
+> * Start BEAUti
+> * Click to the `File => Manage packages` menu item.
+> * Select `EpochClockModel` in the list of packages and the click `Install` button.
+If `EpochClockModel` is not in the list of packages, you must add a package repository first like so: in the package manager, click `Package repositories` button, then click `Add URL` in the window that pops up, where you can put `https://raw.githubusercontent.com/CompEvol/CBAN/master/packages-extra-2.7.xml` in the text field. 
+Then return to the package manager window where the `EpochClockModel` package should appear.
+> * Close BEAUti -- it needs to restart to pick up the new packages.
+
+To install by hand as follows:
 
 * Create the `EpochClockModel` directory inside the BEAST package directory
 
